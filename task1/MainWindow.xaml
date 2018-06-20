@@ -1,0 +1,184 @@
+﻿<Window x:Class="task1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:task1"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="800" Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="1.jpg"/>
+    </Window.Background>
+    <Window.Resources>
+        <Style x:Key="Btn">
+            <Setter Property="Control.Margin" Value="20 8 20 8" />
+            <Setter Property="Control.Width" Value="100" />
+            <Setter Property="Control.Height" Value="30" />
+        </Style>
+        <ControlTemplate TargetType="Button" x:Key="btTemp">
+            <Border Name="Border" CornerRadius="25" BorderBrush="CadetBlue" BorderThickness="2"
+                    Background="#FF3C7AD4"  Height="40" Width="150" >
+                <ContentControl Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" Foreground="Azure" FontSize="16" FontStyle="Italic" FontWeight="Bold"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger  Property="IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#FF4D1D1D"></Setter>
+                </Trigger>
+
+                <Trigger Property="IsPressed"  Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#FF7C3E79"></Setter>
+                </Trigger>
+
+            </ControlTemplate.Triggers>
+
+        </ControlTemplate>
+        
+        <ControlTemplate TargetType="Button" x:Key="btTemplate">
+            <Border Name="Border" CornerRadius="25" BorderBrush="CadetBlue" BorderThickness="2"
+                    Background="Aqua"  Height="40" Width="150" >
+                <ContentControl Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" Foreground="Azure" FontSize="16" FontStyle="Italic" FontWeight="Bold"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger  Property="IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="Red"></Setter>
+                </Trigger>
+                
+                <Trigger Property="IsPressed"  Value="true">
+                     <Setter TargetName="Border" Property="Background" Value="#FF2A77D3"></Setter>
+                             </Trigger>
+
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Name="auth" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible">
+            <TextBlock  FontSize="20" FontWeight="Black"  Foreground="#FFD42B2B" TextWrapping="Wrap" Text="Admin :login=abcd password=1111"/>
+            <TextBlock FontSize="20" FontWeight="ExtraBold" Foreground="DarkViolet" TextWrapping="Wrap"  Text="User:login=efgh password=2222"/>
+            <Label Content="Enter Login" FontSize="20"/>
+            <TextBox Name="txt1" FontSize="20"/>
+            <Label Content="Enter Password" FontSize="20" />
+            <PasswordBox Name="psb1" FontSize="20" Margin="0 10"/>
+            <Button Name="btn1" Content="Submit" Template="{StaticResource btTemplate}" Click="Button_Click"/>
+        </StackPanel>
+        
+        <Grid Name="Userview" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Image Name="img" Source="user.jpg" Width="100" />
+                    <StackPanel>
+                        <Label Content="User" HorizontalAlignment="Center" FontStyle="Oblique" FontSize="22" FontWeight="Bold"  Foreground="DarkGreen"/>
+                        <StackPanel Name="stuser" Orientation="Horizontal">
+                            <Label  Foreground="Bisque"  FontStyle="Oblique" FontSize="22" FontWeight="Bold" Content="{ Binding Path=LastName}"/>
+                            <Label Foreground="Bisque"  FontStyle="Oblique" FontSize="22" FontWeight="Bold"  Content="{Binding Path=FirstName}"/>
+                        </StackPanel>
+                        <Button Name="Exit" Content="Exit" Click="Exit_Click" Template="{StaticResource btTemp}"/>
+                    </StackPanel>
+                </StackPanel>
+                <DataGrid MaxHeight="170" Grid.Row="0" Name="dtgtourist" Background="White"  AutoGenerateColumns="False" Opacity="0.8" HorizontalAlignment="Stretch" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn FontWeight="Bold"  Binding="{Binding FirstName}" Header="FirstName" Width="125"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding LastName}" Header="LastName" Width="120"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding PhoneNumber}" Header="PhoneNumber" Width="120"/>
+                        <DataGridTextColumn  FontWeight="Bold" Binding="{Binding Serial}" Header="Serial" Width="30"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding Number}" Header="Number" Width="120"/>
+                        <!--<DataGridTextColumn FontWeight="Bold" Binding="{Binding TourId}" Header="TourId" Width="50"/>-->
+                        
+                        <DataGridComboBoxColumn x:Name="comboBoxColum" Header="TourId"  SelectedItemBinding="{Binding Path=TourId}"/>
+                        <DataGridComboBoxColumn x:Name="cmbdisc" Header="DiscountId"  SelectedItemBinding="{Binding Path=DiscountId}" Width="70"/>
+                        <!--<DataGridTextColumn FontWeight="Bold" Binding="{Binding DiscountId}" Header="DiscountId" Width="70"/>-->
+                        <DataGridTextColumn FontWeight="Bold" IsReadOnly="True" Binding="{Binding TotalSum}" Header="TotalSum" Width="125"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel HorizontalAlignment="Center"  Grid.Row="1" Orientation="Horizontal">
+                    <Button x:Name="AddButton" Content="Add"  Template="{StaticResource btTemp}" Click="AddButton_Click"  />
+                    <Button x:Name="deleteButton" Content="Delete"   Template="{StaticResource btTemp}" Click="deleteButton_Click"/>
+                    <Button x:Name="changeButton" Content="Change"   Template="{StaticResource btTemp}" Click="changeButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <DataGrid HorizontalAlignment="Center"  Grid.Row="1" Name="dtgdisc" IsEnabled="False"  AutoGenerateColumns="False" Opacity="0.8" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn FontWeight="Bold"  Binding="{Binding Id}" Header="Id" Width="25"/>
+                        <DataGridTextColumn FontWeight="Bold"  Binding="{Binding Type}" Header="Type" Width="125"/>
+                        <DataGridTextColumn FontWeight="Bold"  Binding="{Binding Number}" Header="Number" Width="25"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid Grid.Row="1" Name="dtgtour" IsEnabled="False"  AutoGenerateColumns="False" Opacity="0.8" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn FontWeight="Bold"  Binding="{Binding TourCountry}" Header="TourCountry" Width="125"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding TourCity}" Header="TourCity" Width="120"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding TourBegin,StringFormat=yyyy-MM-dd}" Header="TourBegin" Width="120"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding TourEnd,StringFormat=yyyy-MM-dd}" Header="TourEnd" Width="120"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding MaxSeats}" Header="MaxSeats" Width="30"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding CurrentSeats}" Header="CurrentSeats" Width="30"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding Discount}" Header="Discount" Width="30"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding Price}" Header="Price" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Grid.Row="1" x:Name="UpdateButt" Content="Update Database" Template="{StaticResource btTemp}"  Click="UpdateButton_Click" />
+            </StackPanel>
+        </Grid>
+        
+        
+        <Grid Name="Adminview" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="0.6*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Image Source="admin.jpg" Width="100"/>
+                    <StackPanel>
+                    <Label Content="Admin" Foreground="DarkGreen"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Foreground="#FFE82258" FontStyle="Oblique" FontSize="22" FontWeight="Bold"  Content="Ivanov"/>
+                            <Label Foreground="#FFE82258" FontStyle="Oblique" FontSize="22" FontWeight="Bold"  Content="Ivan"/>
+                        </StackPanel>
+                        <Button Name="Exit1" Content="Exit" Click="Exit_Click" Template="{StaticResource btTemp}"/>
+                    </StackPanel>
+                </StackPanel>
+                <DataGrid MaxHeight="230" Grid.Row="0" Name="dtgadmtour"  AutoGenerateColumns="False" Opacity="0.8" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn FontWeight="Bold"  Binding="{Binding TourCountry}" Header="TourCountry" Width="100"/>
+                    <DataGridTextColumn FontWeight="Bold" Binding="{Binding TourCity}" Header="TourCity" Width="100"/>
+                    <DataGridTextColumn FontWeight="Bold" Binding="{Binding TourBegin,StringFormat=yyyy-MM-dd}" Header="TourBegin" Width="120"/>
+                    <DataGridTextColumn FontWeight="Bold" Binding="{Binding TourEnd,StringFormat=yyyy-MM-dd}" Header="TourEnd" Width="120"/>
+                    <DataGridTextColumn FontWeight="Bold" Binding="{Binding MaxSeats}" Header="MaxSeats" Width="70"/>
+                    <DataGridTextColumn FontWeight="Bold" Binding="{Binding CurrentSeats}" Header="CurrentSeats" Width="90"/>
+                    <DataGridTextColumn IsReadOnly="True" FontWeight="Bold" Binding="{Binding DiscountId}" Header="DiscountId" Width="70"/>
+                    <DataGridTextColumn FontWeight="Bold" Binding="{Binding Price}" Header="Price" Width="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+                <StackPanel HorizontalAlignment="Center"  Grid.Row="0" Orientation="Horizontal">
+                    <Button x:Name="Addbtn" Content="Add" Template="{StaticResource btTemp}"  Click="Addbtn_Click_1" />
+                    <Button x:Name="Dltbtn" Content="Delete" Template="{StaticResource btTemp}"  Click="Dltbtn_Click_1"/>
+                    <Button x:Name="Chgbtn" Content="Change" Template="{StaticResource btTemp}"  Click="Chgbtn_Click_1"/>
+                </StackPanel> 
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <DataGrid Grid.Row="1" Name="dtgusertour"  AutoGenerateColumns="False" Opacity="0.8" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn FontWeight="Bold"  Binding="{Binding LastName}" Header="LastName" Width="100"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding FirstName}" Header="FirstName" Width="100"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding BirthDate,StringFormat=yyyy-MM-dd}" Header="BirthDate" Width="120"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding Userlogin}" Header="Userlogin" Width="70"/>
+                        <DataGridTextColumn FontWeight="Bold" Binding="{Binding UserPassword}" Header="UserPassword" Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel HorizontalAlignment="Center"  Grid.Row="1" Orientation="Horizontal">
+                    <Button x:Name="AddUser" Content="Add" Template="{StaticResource btTemp}"  Click="AddUser_Click"/>
+                    <Button x:Name="DltUser" Content="Delete" Template="{StaticResource btTemp}"  Click="DltUser_Click"/>
+                    <Button x:Name="ChangeUser" Content="Change" Template="{StaticResource btTemp}"  Click="ChangeUser_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        </Grid>
+    
+
+</Window>
